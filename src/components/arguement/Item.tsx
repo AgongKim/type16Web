@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { BarChart, XAxis, YAxis, Bar, Legend, Cell, ResponsiveContainer } from "recharts";
 import Typography from "@mui/material/Typography";
 import { ArguementCommentList } from "../comment/List";

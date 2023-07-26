@@ -18,3 +18,8 @@ export type ArguementItem = {
     title:string;
     content:string;
 }
+
+export type WordCloudProp = {
+    text:string;
+    value:number;
+}
