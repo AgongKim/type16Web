@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Text } from '@visx/text';
 import { scaleLog } from '@visx/scale';
 import Wordcloud from '@visx/wordcloud/lib/Wordcloud';
+import { MutableRefObject } from 'react';
 
 interface ExampleProps {
-    width: number;
-    height: number;
     showControls?: boolean;
     words:WordData[];
 }
@@ -39,8 +38,8 @@ function getRotationDegree() {
 const fixedValueGenerator = () => 0.5;
 
 
-export default function Tagcloud({ width, height, showControls, words }: ExampleProps) {
-    const [spiralType, setSpiralType] = useState<SpiralType>('archimedean');
+export default function Tagcloud({ showControls, words }: ExampleProps) {
+    const [spiralType, setSpiralType] = useState<SpiralType>('rectangular');
     const [withRotation, setWithRotation] = useState(false);
 
 
@@ -51,8 +50,17 @@ export default function Tagcloud({ width, height, showControls, words }: Example
   
     const fontSizeSetter = (datum: WordData) => fontScale(datum.value);
 
+    const ref =useRef<any>();
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
+    
+    useLayoutEffect(() => {
+        setWidth(ref.current.offsetWidth);
+        setHeight(ref.current.offsetHeight);
+    }, []);
+
     return (
-        <div className="wordcloud">
+        <div className="wordcloud" ref={ref}>
         <Wordcloud
             words={words}
             width={width}
@@ -109,23 +117,25 @@ export default function Tagcloud({ width, height, showControls, words }: Example
         )}
         <style>{`
             .wordcloud {
-            display: flex;
-            flex-direction: column;
-            user-select: none;
+                display: flex;
+                flex-direction: column;
+                user-select: none;
+                width:100%;
+                height:500px;
             }
             .wordcloud svg {
-            margin: 1rem 0;
-            cursor: pointer;
+                margin: 1rem 0;
+                cursor: pointer;
             }
 
             .wordcloud label {
-            display: inline-flex;
-            align-items: center;
-            font-size: 14px;
-            margin-right: 8px;
+                display: inline-flex;
+                align-items: center;
+                font-size: 14px;
+                margin-right: 8px;
             }
             .wordcloud textarea {
-            min-height: 100px;
+                min-height: 100px;
             }
         `}</style>
         </div>

@@ -13,6 +13,13 @@ export type Poll = {
     fill:string;
 }
 
+export type Match = {
+    'name':string;
+    'score':number;
+    'fill':string;
+}
+
+
 export type ArguementItem = {
     id?:number;
     title:string;

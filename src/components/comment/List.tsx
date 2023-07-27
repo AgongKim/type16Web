@@ -9,7 +9,30 @@ export function ArguementCommentList(props:{items:CommentItem[]}):React.ReactEle
      * 논쟁 댓글 리스트
      */
     return (
-        <TableContainer component={Paper}>
+        <TableContainer>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableBody>
+                    {props.items.map((row) => (
+                        <ArguementCommentItem 
+                            id={row.id}
+                            content={row.content}
+                            user_mbti={row.user_mbti}
+                            like={row.like}
+                            dislike={row.dislike}
+                        />
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+}
+
+export function MbtiCommentList(props:{items:CommentItem[]}):React.ReactElement {
+    /**
+     * mbti 댓글 리스트
+     */
+    return (
+        <TableContainer>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableBody>
                     {props.items.map((row) => (
