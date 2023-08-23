@@ -34,9 +34,7 @@ export function SignIn(props:any) {
        // Cookies.set('token', token, { expires: 7 }); // 쿠키의 유효기간을 설정하여 토큰을 저장합니다.
     };
 
-    useEffect(function (){
-        props.setLoginPageInfo(true);
-    })
+
     const handleSubmit = (event:any) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -49,7 +47,12 @@ export function SignIn(props:any) {
     // 로그인 요청하기 function
     const signInRequest = async () => {
         try{
-            const {data} = await api.get('/user');
+            const {data} = await api.get('/token/', {
+                params: {
+                    username: '',
+                    password: '',
+                }
+            });
             console.log("-> data", data);
         }catch (e:any) {
             alert(e.message);
@@ -59,7 +62,6 @@ export function SignIn(props:any) {
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
                 <Box
                     sx={{
                         marginTop: 8,
