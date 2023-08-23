@@ -34,6 +34,7 @@ export function SignIn(props:any) {
        // Cookies.set('token', token, { expires: 7 }); // 쿠키의 유효기간을 설정하여 토큰을 저장합니다.
     };
 
+
     const handleSubmit = (event:any) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -107,7 +108,7 @@ export function SignIn(props:any) {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            //onClick={signInRequest}
+                            onClick={signInRequest}
                             sx={{ mt: 3, mb: 2 }}
                         >
                             로그인
