@@ -7,8 +7,8 @@ const polls = [
 ];
 
 const comments = [
-    {"id":343, "content": "그럴거면 그냥 결혼해라", "like":98, "dislike":12, "user_mbti":"INFP"},
-    {"id":344, "content": "깻잎이 뭔 대수냐 아까워서 잡아준거다", "like":98, "dislike":12, "user_mbti":"ENTP"}
+    {"id":343, "content": "그럴거면 그냥 결혼해라", "like":98, "dislike":12, "userMbti":"INFP"},
+    {"id":344, "content": "깻잎이 뭔 대수냐 아까워서 잡아준거다", "like":98, "dislike":12, "userMbti":"ENTP"}
 ];
 
 const arguement = {

@@ -1,9 +1,8 @@
 import { BarChart, XAxis, YAxis, Bar, Legend, Cell, ResponsiveContainer } from "recharts";
 import { Payload } from "recharts/types/component/DefaultLegendContent";
-import { Poll } from "../../types";
-import { Match } from "../../types";
+import { MatchItem } from "../../types";
 
-export function MatchChart(props:{items:Match[]}):React.ReactElement{
+export function MatchChart(props:{items:MatchItem[]}):React.ReactElement{
 
     const legendPayload:Payload[] = props.items.map(
         (item, index) => ({

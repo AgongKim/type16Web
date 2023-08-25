@@ -16,7 +16,7 @@ export function ArguementCommentList(props:{items:CommentItem[]}):React.ReactEle
                         <ArguementCommentItem 
                             id={row.id}
                             content={row.content}
-                            user_mbti={row.user_mbti}
+                            userMbti={row.userMbti}
                             like={row.like}
                             dislike={row.dislike}
                         />
@@ -39,7 +39,7 @@ export function MbtiCommentList(props:{items:CommentItem[]}):React.ReactElement 
                         <ArguementCommentItem 
                             id={row.id}
                             content={row.content}
-                            user_mbti={row.user_mbti}
+                            userMbti={row.userMbti}
                             like={row.like}
                             dislike={row.dislike}
                         />
