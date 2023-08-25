@@ -3,7 +3,7 @@ import KeywordCloud, { WordData }  from "../components/about/wordcloud";
 import { useParams } from 'react-router-dom';
 import { MbtiCommentList } from "../components/comment/List";
 import Hline from "../assets/Hline";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { MatchChart } from "../components/match/list";
 import { MatchItem } from "../types";
 import {useEffect, useState} from "react";
@@ -40,6 +40,16 @@ function AboutContent():React.ReactElement {
 
     const { mbti } = useParams() as { mbti:string };
     const [ keywords, setKeywords ] = useState<WordData[]>([]);
+
+    // 키워드 추가
+    const addKeyword = async (event:any) => {
+        console.log(event.currentTarget)
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        data.append('mbti', mbti);
+        const res = await api.post('/api/v1/keywords/', data);
+        getKeywordData();
+    };
 
     // 로그인 요청하기 function
     const getKeywordData = async () => {
@@ -85,7 +95,21 @@ function AboutContent():React.ReactElement {
                     </Typography>
                     <Hline/>
                     <KeywordCloud words={keywords}/>
-                    <Button onClick={() => {getKeywordData()}}>테스트</Button>
+                    <Box className="horizontal" component="form" onSubmit={addKeyword}>
+                        <TextField
+                                margin="normal"
+                                required
+                                id="keyword"
+                                label="키워드"
+                                name="content"
+                                onChange={(value) => {
+
+                                }}
+                                autoComplete="keyword"
+                                autoFocus
+                            />
+                        <Button type='submit'>키워드 추가</Button>
+                    </Box>
                     <Typography variant="h5">
                         한줄평
                     </Typography>
