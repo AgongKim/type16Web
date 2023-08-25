@@ -43,12 +43,16 @@ function AboutContent():React.ReactElement {
 
     // 키워드 추가
     const addKeyword = async (event:any) => {
-        console.log(event.currentTarget)
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        data.append('mbti', mbti);
-        const res = await api.post('/api/v1/keywords/', data);
-        getKeywordData();
+        try{
+            console.log(event.currentTarget)
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            data.append('mbti', mbti);
+            const res = await api.post('/api/v1/keywords/', data);
+            getKeywordData();
+        }catch (e:any) {
+            alert(e.message);
+        }
     };
 
     // 로그인 요청하기 function
@@ -93,7 +97,7 @@ function AboutContent():React.ReactElement {
                     <Typography variant="h5">
                         키워드
                     </Typography>
-                    <Hline/>
+                    <Hline/>  
                     <KeywordCloud words={keywords}/>
                     <Box className="horizontal" component="form" onSubmit={addKeyword}>
                         <TextField
@@ -101,7 +105,7 @@ function AboutContent():React.ReactElement {
                                 required
                                 id="keyword"
                                 label="키워드"
-                                name="content"
+                                name="content" 
                                 onChange={(value) => {
 
                                 }}
