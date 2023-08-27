@@ -31,8 +31,17 @@ export function SignIn(props:any) {
         email: '',
         password: '',
     });
-console.log("-> document", document.cookie);
-    const handleLogin = async (event:any) => {
+
+    const handleLogin = () => {
+        // 로그인 API 호출 등 로그인 처리 로직
+
+        // 로그인 성공 시 토큰을 받아온다고 가정하고, 해당 토큰을 쿠키에 저장합니다.
+        const token = '로그인 토큰 값';
+        // eslint-disable-next-line no-undef
+       // Cookies.set('token', token, { expires: 7 }); // 쿠키의 유효기간을 설정하여 토큰을 저장합니다.
+    };
+
+    const handleSubmit = (event:any) => {
         event.preventDefault();
         try{
             const { data } = await api.post('api/v1/token/', {
