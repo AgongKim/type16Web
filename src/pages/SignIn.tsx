@@ -41,7 +41,7 @@ export function SignIn(props:any) {
        // Cookies.set('token', token, { expires: 7 }); // 쿠키의 유효기간을 설정하여 토큰을 저장합니다.
     };
 
-    const handleSubmit = (event:any) => {
+    const handleSubmit = async (event:any) => {
         event.preventDefault();
         try{
             const { data } = await api.post('api/v1/token/', {
