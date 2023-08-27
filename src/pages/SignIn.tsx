@@ -14,13 +14,20 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useEffect, useState} from "react";
 import api from "../apis/api";
+import {produce} from "immer";
 
 
 const theme = createTheme();
 
+interface iForm {
+    email: string;
+    password: string;
+}
+
 export function SignIn(props:any) {
 
-    const [form, setForm] = useState({
+    const [token, setToken] = useState<string>('');
+    const [form, setForm] = useState<iForm>({
         email: '',
         password: '',
     });
@@ -34,30 +41,35 @@ export function SignIn(props:any) {
        // Cookies.set('token', token, { expires: 7 }); // 쿠키의 유효기간을 설정하여 토큰을 저장합니다.
     };
 
-
-    const handleSubmit = (event:any) => {
+    const handleSubmit = async (event:any) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-
-    // 로그인 요청하기 function
-    const signInRequest = async () => {
         try{
-            const {data} = await api.get('/token/', {
-                params: {
-                    username: '',
-                    password: '',
-                }
+            const { data } = await api.post('api/v1/token/', {
+                    username: form.email,
+                    password: form.password,
             });
-            console.log("-> data", data);
+            //쿠키에 토큰 저장
+            document.cookie = data.access;
+            await setToken(document.cookie);
+            //document.cookie = `refreshToken=${data.refresh}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
+            window.location.href = '/';
         }catch (e:any) {
             alert(e.message);
         }
-    }
+        const token = '로그인 토큰 값';
+        // eslint-disable-next-line no-undef
+       // Cookies.set('token', token, { expires: 7 }); // 쿠키의 유효기간을 설정하여 토큰을 저장합니다.
+    };
+    const handleEmailChange = (event:any) => {
+        setForm(produce((draft) => {
+            draft.email = event.target.value;
+        }))
+    };
+    const handlePasswordChange = (event:any) => {
+        setForm(produce((draft) => {
+            draft.password = event.target.value;
+        }))
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -76,7 +88,7 @@ export function SignIn(props:any) {
                     <Typography component="h1" variant="h5">
                         로그인
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
@@ -84,9 +96,7 @@ export function SignIn(props:any) {
                             id="email"
                             label="이메일"
                             name="email"
-                            onChange={(value) => {
-
-                            }}
+                            onChange={handleEmailChange}
                             autoComplete="email"
                             autoFocus
                         />
@@ -97,6 +107,7 @@ export function SignIn(props:any) {
                             name="password"
                             label="비밀번호"
                             type="password"
+                            onChange={handlePasswordChange}
                             id="password"
                             autoComplete="current-password"
                         />
@@ -108,7 +119,7 @@ export function SignIn(props:any) {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            onClick={signInRequest}
+                            onClick={handleLogin}
                             sx={{ mt: 3, mb: 2 }}
                         >
                             로그인
@@ -118,7 +129,6 @@ export function SignIn(props:any) {
                         </Link>
                     </Box>
                 </Box>
-
             </Container>
         </ThemeProvider>
     );
