@@ -10,7 +10,7 @@ export function ArguementCommentItem(props:CommentItem):React.ReactElement {
             <TableCell component="th" scope="row">
                 {props.content}
             </TableCell>
-            <TableCell>{props.user_mbti}</TableCell>
+            <TableCell>{props.userMbti}</TableCell>
             <TableCell>{props.like}</TableCell>
             <TableCell>{props.dislike}</TableCell>
         </TableRow>

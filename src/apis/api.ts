@@ -11,4 +11,7 @@ const api: ExtendedAxiosInstance = axios.create({
     baseURL: API_HOST,
 })
 
+api.defaults.headers.post['Content-Type'] = 'application/json';
+
+
 export default api;

@@ -1,21 +1,21 @@
 import React from "react";
-import Tagcloud from "../components/about/wordcloud";
-import { wordFreq } from "../components/about/wordcloud";
+import KeywordCloud, { WordData }  from "../components/about/wordcloud";
 import { useParams } from 'react-router-dom';
 import { MbtiCommentList } from "../components/comment/List";
 import Hline from "../assets/Hline";
-import { Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { MatchChart } from "../components/match/list";
-import { Match } from "../types";
+import { MatchItem } from "../types";
+import {useEffect, useState} from "react";
+import api from "../apis/api";
 
 const comments = [
-    {"id":343, "content": "이새끼 싸이코에요", "like":98, "dislike":12, "user_mbti":"INFP"},
-    {"id":344, "content": "통찰력이있어요", "like":98, "dislike":12, "user_mbti":"INTJ"},
-    {"id":344, "content": "싸가지가 없는거같아요", "like":98, "dislike":12, "user_mbti":"ENFP"}
+    {"id":343, "content": "이새끼 싸이코에요", "like":98, "dislike":12, "userMbti":"INFP"},
+    {"id":344, "content": "통찰력이있어요", "like":98, "dislike":12, "userMbti":"INTJ"},
+    {"id":344, "content": "싸가지가 없는거같아요", "like":98, "dislike":12, "userMbti":"ENFP"}
 ];
 
-
-const items:Match[] = [
+const matchItems:MatchItem[] = [
     {name: 'ENTJ', score: 123, fill:"#8884d8"},
     {name: 'ENFP', score: 111, fill:"#82ca9d"},
     {name: 'ENFJ', score: 99, fill:"#8884d8"},
@@ -37,14 +37,44 @@ function AboutContent():React.ReactElement {
     /**
      * 각 타일별 디테일 페이지
      */
-    let { mbti } = useParams();
 
+    const { mbti } = useParams() as { mbti:string };
+    const [ keywords, setKeywords ] = useState<WordData[]>([]);
 
-    const totoAfricaLyrics = `개인주의 자유주의 이성적 이상주의 창의력 개성적 뛰어난 언변 직설적 브레인 스토밍 즉흥적 낙천적 솔직함 개방적 사고 모험 논리적 사고 변화와 혁신 직관적 사고 다원주의 자기애 독립성 독창성 몽상가 기질 자존감 논쟁과 토론 객관적 융통성 공격적 비판 스포트라이트 재미 반골 기질개인주의 자유주의 이성적 이상주의 창의력 개성적 뛰어난 언변 직설적 브레인 스토밍 즉흥적 낙천적 솔직함 개방적 사고 모험 논리적 사고 변화와 혁신 직관적 사고 다원주의 자기애 독립성 독창성 몽상가 기질 자존감 논쟁과 토론 객관적 융통성 공격적 비판 스포트라이트 재미 반골 기질`;
-    const words = wordFreq(totoAfricaLyrics);
+    // 키워드 추가
+    const addKeyword = async (event:any) => {
+        try{
+            console.log(event.currentTarget)
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            data.append('mbti', mbti);
+            const res = await api.post('/api/v1/keywords/', data);
+            getKeywordData();
+        }catch (e:any) {
+            alert(e.message);
+        }
+    };
+
+    // 로그인 요청하기 function
+    const getKeywordData = async () => {
+        try{
+            const res = await api.get(`/api/v1/keywords/?mbti=${mbti}`);
+            let rs = []
+            for (const item of res.data.data){
+                rs.push({text:item.content, value:item.count})
+            }
+            setKeywords(rs); 
+        }catch (e:any) {
+            alert(e.message);
+        }
+    }
+
+    useEffect(() => {
+        getKeywordData()
+    },[]);
+
 
     return (
-        
         <div className="wrapper">
             <div className="container horizontal">
                 <div className="profile w_one_third">
@@ -67,8 +97,23 @@ function AboutContent():React.ReactElement {
                     <Typography variant="h5">
                         키워드
                     </Typography>
-                    <Hline/>
-                    <Tagcloud words={words}/>
+                    <Hline/>  
+                    <KeywordCloud words={keywords}/>
+                    <Box className="horizontal" component="form" onSubmit={addKeyword}>
+                        <TextField
+                                margin="normal"
+                                required
+                                id="keyword"
+                                label="키워드"
+                                name="content" 
+                                onChange={(value) => {
+
+                                }}
+                                autoComplete="keyword"
+                                autoFocus
+                            />
+                        <Button type='submit'>키워드 추가</Button>
+                    </Box>
                     <Typography variant="h5">
                         한줄평
                     </Typography>
@@ -78,7 +123,7 @@ function AboutContent():React.ReactElement {
                         나와의 궁합은?
                     </Typography>
                     <Hline/>
-                    <MatchChart items={items}/>
+                    <MatchChart items={matchItems}/>
                 </div>
             </div>
         </div>
