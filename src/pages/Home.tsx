@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { ArguementHot } from "../components/arguement/Item";
+import api, {getToken} from "../apis/api";
 
 const polls = [
     {name: '된다', percentage: 67, fill:"#8884d8"},

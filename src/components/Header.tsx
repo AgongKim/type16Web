@@ -1,14 +1,28 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { PropsWithChildren } from "react";
 import {Link, useLocation} from "react-router-dom";
 import {Grid} from "@mui/material";
 import img from "../assets/img";
+import api, {setToken} from "../apis/api";
 
 
 export function Header(props:PropsWithChildren):React.ReactElement {
     /**
      * 논쟁 댓글 리스트
      */
+
+    const [userData, setUserData] = useState<any>();
+    useEffect(() => {
+        const init = async () => {
+            const {data} = await api.get('api/v1/users/');
+            setUserData(data);
+        }
+
+        if(document.cookie) {
+            setToken(document.cookie);
+            init();
+        }
+    },[])
 
     const location = useLocation();
     const currentPage = location.pathname;
@@ -43,9 +57,9 @@ export function Header(props:PropsWithChildren):React.ReactElement {
                         </Link>
                     </Grid>
                     <Grid item xs={6} style={{justifyContent: 'flex-end'}}>
-                        <Link style={headerTitle} to='/SignIn'>
+                        {userData ? <span>{userData.data.nickname}</span> : <Link style={headerTitle} to='/SignIn'>
                             <span style={{ padding:10, background: '#1976d2', color: '#fff', fontWeight: 700, fontSize: 14}}>로그인</span>
-                        </Link>
+                        </Link>}
                     </Grid>
                 </Grid>
             </div>
